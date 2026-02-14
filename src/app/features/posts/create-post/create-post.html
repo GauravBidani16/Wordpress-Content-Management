@@ -1,0 +1,125 @@
+<div class="create-post-container">
+  <h2>Create New Post</h2>
+
+  <!-- Title -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Post Title</mat-label>
+    <input matInput [(ngModel)]="title" placeholder="Enter post title" />
+  </mat-form-field>
+
+  <!-- Rich Text Editor -->
+  <div class="editor-section">
+    <label class="section-label">Content</label>
+    <quill-editor
+      [(ngModel)]="content"
+      [modules]="quillModules"
+      placeholder="Write your post content here..."
+      class="content-editor">
+    </quill-editor>
+  </div>
+
+  <!-- Categories -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Categories</mat-label>
+    <mat-select [(ngModel)]="selectedCategories" multiple>
+      @for (cat of categories; track cat.id) {
+        <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Status -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Status</mat-label>
+    <mat-select [(ngModel)]="status">
+      <mat-option value="draft">Draft</mat-option>
+      <mat-option value="publish">Publish</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Featured Image -->
+  <mat-card class="media-card">
+    <mat-card-header>
+      <mat-card-title>Featured Image</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group>
+
+        <!-- Frequent Media Tab -->
+        @if (frequentMedia.length) {
+          <mat-tab label="Frequently Used">
+            <div class="media-grid">
+              @for (media of frequentMedia; track media.id) {
+                <div
+                  class="media-item"
+                  [class.selected]="selectedMediaId === media.id"
+                  (click)="selectMedia(media.id)">
+                  <img [src]="media.guid.rendered" [alt]="media.title.rendered" />
+                </div>
+              }
+            </div>
+          </mat-tab>
+        }
+
+        <!-- All Media Tab -->
+        <mat-tab label="Media Library">
+          <div class="media-grid">
+            @for (media of mediaLibrary; track media.id) {
+              <div
+                class="media-item"
+                [class.selected]="selectedMediaId === media.id"
+                (click)="selectMedia(media.id)">
+                <img [src]="media.guid.rendered" [alt]="media.title.rendered" />
+              </div>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Upload Tab -->
+        <mat-tab label="Upload New">
+          <div class="upload-section">
+            <input type="file" accept="image/*" (change)="uploadImage($event)" #fileInput hidden />
+            <button mat-raised-button (click)="fileInput.click()" [disabled]="uploading">
+              <mat-icon>cloud_upload</mat-icon>
+              {{ uploading ? 'Uploading...' : 'Choose Image' }}
+            </button>
+            @if (uploading) {
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            }
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+
+      <!-- Selected image preview -->
+      @if (selectedMediaId) {
+        <div class="selected-preview">
+          <p class="section-label">Selected Featured Image</p>
+          @for (media of mediaLibrary; track media.id) {
+            @if (media.id === selectedMediaId) {
+              <img [src]="media.guid.rendered" [alt]="media.title.rendered" class="preview-image" />
+            }
+          }
+          <button mat-button color="warn" (click)="selectedMediaId = null">Remove</button>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Submit -->
+  @if (submitting) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  @if (statusMessage) {
+    <p class="status-message" [class.success]="statusSuccess" [class.error]="!statusSuccess">
+      {{ statusMessage }}
+    </p>
+  }
+
+  <div class="actions">
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting || !title.trim()">
+      {{ status === 'publish' ? 'Publish Post' : 'Save Draft' }}
+    </button>
+  </div>
+</div>

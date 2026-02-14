@@ -1,0 +1,42 @@
+<div class="settings-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>WordPress Connection</mat-card-title>
+      <mat-card-subtitle>Enter your credentials to connect to the WordPress REST API</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="username" placeholder="WordPress username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Application Password</mat-label>
+        <input matInput [(ngModel)]="appPassword" type="password"
+          placeholder="xxxx xxxx xxxx xxxx" />
+      </mat-form-field>
+
+      @if (testing) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+
+      @if (statusMessage) {
+        <p class="status-message" [class.success]="statusSuccess" [class.error]="!statusSuccess">
+          {{ statusMessage }}
+        </p>
+      }
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button (click)="testConnection()" [disabled]="testing">
+        Test Connection
+      </button>
+      @if (statusSuccess) {
+        <button mat-raised-button color="primary" (click)="proceed()">
+          Continue
+        </button>
+      }
+    </mat-card-actions>
+  </mat-card>
+</div>

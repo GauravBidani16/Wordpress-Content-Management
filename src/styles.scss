@@ -1,1 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@import 'quill/dist/quill.snow.css';
+
+html {
+  height: 100%;
+  margin: 0;
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  // Defer to user's system preference by default, overridden by theme service
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  height: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Dark mode class applied to body by ThemeService
+body.dark-theme {
+  color-scheme: dark;
+}
+
+// Global utility classes
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+}
+
+.page-header p {
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.status-message {
+  margin: 12px 0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.status-message.success {
+  background: color-mix(in srgb, var(--mat-sys-primary) 15%, transparent);
+  color: var(--mat-sys-primary);
+}
+
+.status-message.error {
+  background: color-mix(in srgb, var(--mat-sys-error) 15%, transparent);
+  color: var(--mat-sys-error);
+}
