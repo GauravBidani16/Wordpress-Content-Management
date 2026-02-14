@@ -1,5 +1,8 @@
-<div class="create-post-container">
-  <h2>Create New Post</h2>
+<div class="container-md pb-2xl">
+  <div class="page-header">
+    <h2>Create New Post</h2>
+    <p>Compose and publish content to your WordPress site</p>
+  </div>
 
   <!-- Title -->
   <mat-form-field appearance="outline" class="full-width">
@@ -117,7 +120,7 @@
     </p>
   }
 
-  <div class="actions">
+  <div class="flex justify-end mt-lg">
     <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting || !title.trim()">
       {{ status === 'publish' ? 'Publish Post' : 'Save Draft' }}
     </button>

@@ -1,3 +1,5 @@
+@use 'styles/variables' as *;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -13,7 +15,7 @@
 }
 
 .toolbar-title {
-  margin-left: 8px;
+  margin-left: $space-sm;
   font-size: 1.2rem;
   font-weight: 500;
 }
@@ -24,9 +26,9 @@
 
 .connection-badge {
   font-size: 0.75rem;
-  padding: 4px 12px;
-  border-radius: 16px;
-  margin-right: 8px;
+  padding: $space-xs $space-md;
+  border-radius: $space-md;
+  margin-right: $space-sm;
   font-weight: 500;
 
   &.connected {
@@ -45,15 +47,15 @@
 }
 
 .sidenav {
-  width: 250px;
+  width: 15.625rem;
   border-right: 1px solid var(--mat-sys-outline-variant);
 }
 
 .sidenav-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 20px 16px;
+  gap: $space-md;
+  padding: $space-lg $space-md;
   font-size: 1rem;
   font-weight: 500;
   border-bottom: 1px solid var(--mat-sys-outline-variant);
@@ -74,11 +76,11 @@
 }
 
 .content-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
+  max-width: 75rem;
+  margin-inline: auto;
+  padding: $space-lg;
 
-  @media (max-width: 599px) {
-    padding: 16px;
+  @include respond(sm) {
+    padding: $space-md;
   }
 }
