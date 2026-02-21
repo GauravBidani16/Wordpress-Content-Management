@@ -69,3 +69,12 @@ body.dark-theme {
   background: color-mix(in srgb, var(--mat-sys-error) 15%, transparent);
   color: var(--mat-sys-error);
 }
+
+// Snackbar styles
+.snackbar-success .mdc-snackbar__surface {
+  background: #2e7d32 !important;
+}
+
+.snackbar-error .mdc-snackbar__surface {
+  background: #c62828 !important;
+}

@@ -1,16 +1,16 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { QuillModule } from 'ngx-quill';
 import { WpApiService } from '../../../core/services/wp-api.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { WpCategory, WpMedia, WpPostPayload } from '../../../core/models/wp.models';
 
 @Component({
@@ -18,15 +18,14 @@ import { WpCategory, WpMedia, WpPostPayload } from '../../../core/models/wp.mode
   standalone: true,
   imports: [
     FormsModule,
-    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
     MatProgressBarModule,
-    MatChipsModule,
     MatIconModule,
-    MatTabsModule,
+    MatDividerModule,
+    MatTooltipModule,
     QuillModule
   ],
   templateUrl: './create-post.html',
@@ -42,8 +41,8 @@ export class CreatePost implements OnInit {
   categories: WpCategory[] = [];
   mediaLibrary: WpMedia[] = [];
 
-  // Hardcoded for POC, will come from SharePoint list later
-  frequentMediaIds: number[] = [/* add your most used media IDs here */];
+  // Hardcoded for POC -- will come from SharePoint list later
+  frequentMediaIds: number[] = [];
   frequentMedia: WpMedia[] = [];
 
   submitting = false;
@@ -63,6 +62,7 @@ export class CreatePost implements OnInit {
 
   constructor(
     private wpApi: WpApiService,
+    private notification: NotificationService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -84,7 +84,6 @@ export class CreatePost implements OnInit {
     this.wpApi.getMedia().subscribe({
       next: (media) => {
         this.mediaLibrary = media;
-        // Filter frequent media from the full library
         this.frequentMedia = media.filter(m => this.frequentMediaIds.includes(m.id));
         this.cdr.markForCheck();
       }
@@ -107,12 +106,11 @@ export class CreatePost implements OnInit {
         this.mediaLibrary.unshift(media);
         this.selectedMediaId = media.id;
         this.uploading = false;
+        this.notification.success('Image uploaded successfully.');
         this.cdr.markForCheck();
       },
       error: () => {
         this.uploading = false;
-        this.statusMessage = 'Failed to upload image.';
-        this.statusSuccess = false;
         this.cdr.markForCheck();
       }
     });
@@ -120,8 +118,7 @@ export class CreatePost implements OnInit {
 
   submit(): void {
     if (!this.title.trim()) {
-      this.statusMessage = 'Title is required.';
-      this.statusSuccess = false;
+      this.notification.error('Title is required.');
       return;
     }
 
@@ -141,13 +138,14 @@ export class CreatePost implements OnInit {
         this.submitting = false;
         this.statusSuccess = true;
         this.statusMessage = `Post created successfully (ID: ${post.id})`;
+        this.notification.success(
+          this.status === 'publish' ? 'Post published successfully.' : 'Draft saved successfully.'
+        );
         this.resetForm();
         this.cdr.markForCheck();
       },
       error: () => {
         this.submitting = false;
-        this.statusSuccess = false;
-        this.statusMessage = 'Failed to create post. Please try again.';
         this.cdr.markForCheck();
       }
     });

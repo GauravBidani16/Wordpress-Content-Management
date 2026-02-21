@@ -1,56 +1,138 @@
 @use 'styles/variables' as *;
 
-.editor-section {
-  margin-bottom: $space-md;
+// Top toolbar with status and publish button
+.page-toolbar {
+  flex-wrap: wrap;
+  gap: $space-md;
+  margin-bottom: $space-lg;
+}
+
+.page-toolbar .page-header {
+  margin-bottom: 0;
+}
+
+.status-select {
+  width: 8rem;
+
+  // Reduce the form field height to align with button
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+// Featured image preview banner
+.featured-preview {
+  position: relative;
+  width: 100%;
+  max-height: 18rem;
+  border-radius: $space-sm;
+  overflow: hidden;
+  margin-bottom: $space-lg;
+
+  img {
+    width: 100%;
+    max-height: 18rem;
+    object-fit: cover;
+    display: block;
+  }
+
+  .remove-featured {
+    position: absolute;
+    top: $space-sm;
+    right: $space-sm;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+  }
+}
+
+// Clean flat sections separated by dividers
+.section {
+  padding: $space-lg 0;
 }
 
 .section-label {
+  display: block;
   font-size: 0.85rem;
+  font-weight: 500;
   color: var(--mat-sys-on-surface-variant);
   margin-bottom: $space-sm;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.no-margin {
+    margin-bottom: 0;
+  }
 }
 
+.subsection-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: $space-sm;
+  margin-top: $space-md;
+}
+
+// Title input styled to look like a heading
+.title-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1.75rem;
+  font-weight: 500;
+  font-family: inherit;
+  background: transparent;
+  color: var(--mat-sys-on-surface);
+  padding: $space-sm 0;
+
+  &::placeholder {
+    color: var(--mat-sys-on-surface-variant);
+    opacity: 0.5;
+  }
+}
+
+// Quill editor
 .content-editor {
   display: block;
-  margin-bottom: $space-md;
-
-  ::ng-deep .ql-container {
-    min-height: 12.5rem;
-    background: var(--mat-sys-surface);
-    color: var(--mat-sys-on-surface);
-  }
 
   ::ng-deep .ql-toolbar {
     background: var(--mat-sys-surface-container);
     border-color: var(--mat-sys-outline-variant);
+    border-radius: $space-sm $space-sm 0 0;
   }
 
   ::ng-deep .ql-container {
+    min-height: 15rem;
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
     border-color: var(--mat-sys-outline-variant);
+    border-radius: 0 0 $space-sm $space-sm;
+    font-size: 1rem;
   }
 }
 
-.media-card {
-  margin-bottom: $space-lg;
-}
-
+// Media grid with selection overlay
 .media-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
-  gap: $space-md;
-  padding: $space-md 0;
+  gap: $space-sm;
+
+  @include respond(md) {
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  }
 }
 
 .media-item {
+  position: relative;
   cursor: pointer;
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   border-radius: $space-sm;
   overflow: hidden;
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, transform 0.15s;
+  aspect-ratio: 1;
 
   &:hover {
     border-color: var(--mat-sys-outline);
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 
   &.selected {
@@ -59,26 +141,25 @@
 
   img {
     width: 100%;
-    height: 6.25rem;
+    height: 100%;
     object-fit: cover;
     display: block;
   }
 }
 
-.upload-section {
-  padding: $space-lg 0;
-  text-align: center;
-}
+// Check mark overlay on selected media
+.selected-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.selected-preview {
-  margin-top: $space-md;
-  text-align: center;
-
-  .preview-image {
-    max-width: 18.75rem;
-    max-height: 12.5rem;
-    border-radius: $space-sm;
-    display: block;
-    margin: $space-sm auto;
+  mat-icon {
+    color: white;
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
   }
 }

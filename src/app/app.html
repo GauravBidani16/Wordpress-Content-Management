@@ -19,6 +19,11 @@
   </button>
 </mat-toolbar>
 
+<!-- Global loading bar -->
+@if (loading.isLoading()) {
+  <mat-progress-bar mode="indeterminate" class="global-loader"></mat-progress-bar>
+}
+
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav
     [mode]="isMobile ? 'over' : 'side'"
